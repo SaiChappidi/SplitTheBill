@@ -1,31 +1,17 @@
 Rails.application.routes.draw do
-  get "expenses/new"
-  get "expenses/create"
-  get "expenses/edit"
-  get "expenses/update"
-  get "expenses/destroy"
-  get "trips/index"
-  get "trips/show"
-  get "trips/new"
-  get "trips/create"
-  get "trips/edit"
-  get "trips/update"
-  get "trips/destroy"
-  get "sessions/new"
-  get "sessions/create"
-  get "sessions/destroy"
-  get "users/new"
-  get "users/create"
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  # auth routes
+  get    '/signup', to: 'users#new',        as: :signup
+  post   '/signup', to: 'users#create'
+  get    '/login',  to: 'sessions#new',     as: :login
+  post   '/login',  to: 'sessions#create'
+  delete '/logout', to: 'sessions#destroy', as: :logout
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  # app routes
+  resources :trips do
+    resources :expenses, only: [:new, :create, :edit, :update, :destroy]
+  end
+
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-
-  # Defines the root path route ("/")
-  # root "posts#index"
+  root 'trips#index'
 end
