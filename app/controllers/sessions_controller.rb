@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
     user = User.find_by(email: params[:session][:email].downcase)
     # verify user exists & password matches the hash
     if user && user.authenticate(params[:session][:password])
-      session[:user_id] = user.id 
+      session[:user_id] = user.id
       redirect_to root_path, notice: "Logged in successfully. Welcome, #{user.name}!"
     else
       flash.now[:alert] = "Invalid email or password combination."
