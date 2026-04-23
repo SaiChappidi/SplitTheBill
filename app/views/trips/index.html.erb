@@ -1,2 +1,12 @@
-<h1>Trips#index</h1>
-<p>Find me in app/views/trips/index.html.erb</p>
+<h1>Your Trips</h1>
+
+<%= link_to "New Trip", new_trip_path %>
+
+<ul>
+  <% @trips.each do |trip| %>
+    <li>
+      <%= link_to trip.name, trip_path(trip) %> 
+      (<%= trip.start_date %> - <%= trip.end_date %>)
+    </li>
+  <% end %>
+</ul>
