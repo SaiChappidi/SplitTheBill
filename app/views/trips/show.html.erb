@@ -6,3 +6,8 @@
 <%= link_to "Edit", edit_trip_path(@trip) %> |
 <%= link_to "Delete", trip_path(@trip), method: :delete, data: { confirm: "Are you sure?" } %> |
 <%= link_to "Back to Trips", trips_path %>
+
+<hr>
+
+<h2>Expenses</h2>
+<%= link_to "Add Expense", new_trip_expense_path(@trip) %>
