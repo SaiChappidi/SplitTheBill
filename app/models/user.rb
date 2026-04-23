@@ -1,5 +1,6 @@
 class User < ApplicationRecord
     has_secure_password # handle password hashing
+    has_many :trips, dependent: :destroy
 
     # validations to ensure data integrity
     validates :name,  presence: true
