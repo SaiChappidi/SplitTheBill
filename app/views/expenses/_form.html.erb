@@ -1,0 +1,57 @@
+<section class="card form-card">
+  <h1><%= @expense.new_record? ? "Add Expense" : "Edit Expense" %></h1>
+
+  <% if @expense.errors.any? %>
+    <div class="error-box">
+      <h2><%= pluralize(@expense.errors.count, "error") %> prevented this expense from being saved:</h2>
+      <ul>
+        <% @expense.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_with(model: [@trip, @expense]) do |f| %>
+    <div class="form-grid">
+      <div class="field">
+        <%= f.label :description %>
+        <%= f.text_field :description, placeholder: "Dinner at Riverfront Grill" %>
+      </div>
+
+      <div class="field">
+        <%= f.label :amount %>
+        <%= f.number_field :amount, step: "0.01", min: "0.01" %>
+      </div>
+
+      <div class="field">
+        <%= f.label :date %>
+        <%= f.date_field :date %>
+      </div>
+
+      <div class="field">
+        <%= f.label :category %>
+        <%= f.select :category, Expense::CATEGORIES, {}, class: "input-select" %>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Who shares this expense?</label>
+      <p class="field-help">Leave empty to split across all participants.</p>
+      <div class="participant-list">
+        <% selected_ids = @expense.persisted? ? @expense.shared_users.pluck(:id) : @participants.map(&:id) %>
+        <% @participants.each do |participant| %>
+          <label class="check-tile">
+            <%= check_box_tag "expense[shared_user_ids][]", participant.id, selected_ids.include?(participant.id) %>
+            <span><%= participant.name %></span>
+          </label>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="actions-row">
+      <%= f.submit(@expense.new_record? ? "Add Expense" : "Save Expense", class: "btn") %>
+      <%= link_to "Back to Trip", trip_path(@trip), class: "btn btn-ghost" %>
+    </div>
+  <% end %>
+</section>

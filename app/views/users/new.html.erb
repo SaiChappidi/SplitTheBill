@@ -1,12 +1,37 @@
-<h1>Sign Up</h1>
+<section class="card auth-card">
+  <h1>Create Account</h1>
+  <p>Start organizing shared trip expenses in one place.</p>
 
-<%= form_with(model: @user, url: signup_path) do |f| %>  <%= f.label :name %>
-  <%= f.text_field :name %>
-  <%= f.label :email %>
-  <%= f.email_field :email %>
-  <%= f.label :password %>
-  <%= f.password_field :password %>
-  <%= f.label :password_confirmation %>
-  <%= f.password_field :password_confirmation %>
-  <%= f.submit "Create Account" %>
-<% end %>
+  <% if @user.errors.any? %>
+    <div class="error-box">
+      <h2><%= pluralize(@user.errors.count, "error") %> prevented sign up:</h2>
+      <ul>
+        <% @user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_with(model: @user, url: signup_path) do |f| %>
+    <div class="field">
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+    </div>
+    <div class="field">
+      <%= f.label :email %>
+      <%= f.email_field :email %>
+    </div>
+    <div class="field">
+      <%= f.label :password %>
+      <%= f.password_field :password %>
+    </div>
+    <div class="field">
+      <%= f.label :password_confirmation %>
+      <%= f.password_field :password_confirmation %>
+    </div>
+    <%= f.submit "Create Account", class: "btn" %>
+  <% end %>
+
+  <p class="auth-switch">Already have an account? <%= link_to "Log in", login_path %></p>
+</section>

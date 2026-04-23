@@ -1,2 +1,133 @@
-<h1>Trips#show</h1>
-<p>Find me in app/views/trips/show.html.erb</p>
+<section class="card trip-head">
+	<div>
+		<h1><%= @trip.name %></h1>
+		<p><%= @trip.start_date.strftime("%b %-d, %Y") %> to <%= @trip.end_date.strftime("%b %-d, %Y") %></p>
+	</div>
+	<div class="actions-row">
+		<%= link_to "Add Expense", new_trip_expense_path(@trip), class: "btn" %>
+		<%= link_to "Edit Trip", edit_trip_path(@trip), class: "btn btn-ghost" %>
+	</div>
+</section>
+
+<section class="stats-grid">
+	<% @participant_users.each do |person| %>
+		<% spent = @spent_by_user[person.id] %>
+		<% owed = @owed_by_user[person.id] %>
+		<% net = @net_balances[person.id] %>
+		<article class="card stat-card">
+			<h2><%= person.name %></h2>
+			<p>Spent: $<%= format("%.2f", spent) %></p>
+			<p>Share Owed: $<%= format("%.2f", owed) %></p>
+			<p class="balance <%= net >= 0 ? "positive" : "negative" %>">
+				Net: $<%= format("%.2f", net) %>
+			</p>
+		</article>
+	<% end %>
+</section>
+
+<section class="card">
+	<div class="section-head">
+		<h2>Expense Insights</h2>
+		<p>Filter expenses and watch totals update live.</p>
+	</div>
+
+	<div class="filters" data-expense-filters>
+		<label>
+			Search
+			<input type="text" id="expense-search" placeholder="description...">
+		</label>
+		<label>
+			Category
+			<select id="expense-category-filter">
+				<option value="">All</option>
+				<% Expense::CATEGORIES.each do |category| %>
+					<option value="<%= category %>"><%= category %></option>
+				<% end %>
+			</select>
+		</label>
+		<label>
+			Participant
+			<select id="expense-person-filter">
+				<option value="">All</option>
+				<% @participant_users.each do |person| %>
+					<option value="<%= person.name %>"><%= person.name %></option>
+				<% end %>
+			</select>
+		</label>
+	</div>
+
+	<div class="chart-wrap">
+		<canvas id="category-chart" width="640" height="260"></canvas>
+	</div>
+
+	<p class="summary-line">
+		Showing <span id="visible-expense-count"><%= @expenses.size %></span> expenses,
+		total <strong>$<span id="visible-expense-total"><%= format("%.2f", @expenses.sum { |e| e.amount.to_f }) %></span></strong>
+	</p>
+
+	<div class="table-wrap">
+		<table class="expense-table" id="expense-table">
+			<thead>
+				<tr>
+					<th>Description</th>
+					<th>Category</th>
+					<th>Date</th>
+					<th>Paid By</th>
+					<th>Amount</th>
+					<th>Shared With</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @expenses.each do |expense| %>
+					<% share_names = expense.shared_users.any? ? expense.shared_users.map(&:name) : @participant_users.map(&:name) %>
+					<tr
+						data-description="<%= expense.description.downcase %>"
+						data-category="<%= expense.category %>"
+						data-payer="<%= expense.user.name %>"
+						data-amount="<%= expense.amount.to_f %>"
+					>
+						<td><%= expense.description %></td>
+						<td><span class="tag"><%= expense.category %></span></td>
+						<td><%= expense.date.strftime("%b %-d, %Y") %></td>
+						<td><%= expense.user.name %></td>
+						<td>$<%= format("%.2f", expense.amount) %></td>
+						<td><%= share_names.join(", ") %></td>
+						<td class="actions-row">
+							<%= link_to "Edit", edit_trip_expense_path(@trip, expense), class: "btn btn-small btn-ghost" %>
+							<%= link_to "Delete", trip_expense_path(@trip, expense),
+													class: "btn btn-small btn-danger",
+													data: { turbo_method: :delete, turbo_confirm: "Delete this expense?" } %>
+						</td>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>
+	</div>
+</section>
+
+<section class="card">
+	<div class="section-head">
+		<h2>Settlement Plan</h2>
+		<p>Suggested minimum transactions to settle balances.</p>
+	</div>
+
+	<% if @settlement_transactions.any? %>
+		<ol class="settlement-list">
+			<% @settlement_transactions.each do |transaction| %>
+				<li>
+					<strong><%= transaction[:from].name %></strong>
+					pays
+					<strong><%= transaction[:to].name %></strong>
+					<span class="settle-amount">$<%= format("%.2f", transaction[:amount]) %></span>
+				</li>
+			<% end %>
+		</ol>
+	<% else %>
+		<p>Everyone is settled up.</p>
+	<% end %>
+</section>
+
+<section class="actions-row page-actions">
+	<%= link_to "Back to Trips", trips_path, class: "btn btn-ghost" %>
+</section>

@@ -1,2 +1,34 @@
-<h1>Trips#index</h1>
-<p>Find me in app/views/trips/index.html.erb</p>
+<section class="hero card">
+	<div>
+		<h1>Your Trips</h1>
+		<p>Track who paid, who owes, and settle up fast.</p>
+	</div>
+	<%= link_to "New Trip", new_trip_path, class: "btn" %>
+</section>
+
+<section>
+	<% if @trips.any? %>
+		<div class="trip-grid">
+			<% @trips.each do |trip| %>
+				<article class="card trip-card">
+					<h2><%= trip.name %></h2>
+					<p><%= trip.start_date.strftime("%b %-d, %Y") %> to <%= trip.end_date.strftime("%b %-d, %Y") %></p>
+					  <p><strong><%= trip.participants.count.positive? ? trip.participants.count : 1 %></strong> participants</p>
+					<div class="actions-row">
+						<%= link_to "View", trip_path(trip), class: "btn btn-small" %>
+						<%= link_to "Edit", edit_trip_path(trip), class: "btn btn-ghost btn-small" %>
+						<%= link_to "Delete", trip_path(trip),
+												class: "btn btn-danger btn-small",
+												data: { turbo_method: :delete, turbo_confirm: "Delete this trip?" } %>
+					</div>
+				</article>
+			<% end %>
+		</div>
+	<% else %>
+		<article class="card empty-state">
+			<h2>No trips yet</h2>
+			<p>Create your first trip to start logging shared expenses.</p>
+			<%= link_to "Create Trip", new_trip_path, class: "btn" %>
+		</article>
+	<% end %>
+</section>

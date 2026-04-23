@@ -1,9 +1,18 @@
-<h1>Login</h1>
+<section class="card auth-card">
+  <h1>Welcome Back</h1>
+  <p>Log in to continue managing your group trips.</p>
 
-<%= form_with(scope: :session, url: login_path) do |f| %>
-  <%= f.label :email %>
-  <%= f.email_field :email %>
-  <%= f.label :password %>
-  <%= f.password_field :password %>
-  <%= f.submit "Log In" %>
-<% end %>
+  <%= form_with(scope: :session, url: login_path) do |f| %>
+    <div class="field">
+      <%= f.label :email %>
+      <%= f.email_field :email, autofocus: true %>
+    </div>
+    <div class="field">
+      <%= f.label :password %>
+      <%= f.password_field :password %>
+    </div>
+    <%= f.submit "Log In", class: "btn" %>
+  <% end %>
+
+  <p class="auth-switch">No account? <%= link_to "Create one", signup_path %></p>
+</section>
