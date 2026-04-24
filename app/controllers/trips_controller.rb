@@ -7,6 +7,9 @@ class TripsController < ApplicationController
   end
 
   def show
+    @trip = Trip.find(params[:id])
+    @balances = @trip.balances
+    @settlements = @trip.settlement_transactions
   end
 
   def new

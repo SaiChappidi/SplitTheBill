@@ -11,3 +11,32 @@
 
 <h2>Expenses</h2>
 <%= link_to "Add Expense", new_trip_expense_path(@trip) %>
+
+<h2>Balances</h2>
+
+<ul>
+  <% @balances.each do |user, balance| %>
+    <li>
+      <b><%= user.name %></b>:
+      Paid <%= number_to_currency(@trip.total_paid_by(user)) %>,
+      Owes <%= number_to_currency(@trip.total_owed_by(user)) %>,
+      Balance <%= number_to_currency(balance) %>
+    </li>
+  <% end %>
+</ul>
+
+<h2>Settlement</h2>
+
+<% if @settlements.any? %>
+  <ul>
+    <% @settlements.each do |transaction| %>
+      <li>
+        <%= transaction[:from].name %> pays
+        <%= transaction[:to].name %>
+        <%= number_to_currency(transaction[:amount]) %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No settlement needed.</p>
+<% end %>
