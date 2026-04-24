@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-    has_secure_password
+    has_secure_password # handle password hashing
 
     has_many :trips, dependent: :destroy
     has_many :participants, dependent: :destroy
