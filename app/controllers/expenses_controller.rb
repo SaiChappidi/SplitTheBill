@@ -3,7 +3,7 @@ class ExpensesController < ApplicationController
   before_action :set_trip
   before_action :set_expense, only: [ :edit, :update, :destroy ]
   before_action :require_expense_editor, only: [ :edit, :update, :destroy ]
-  
+
   def new
     @expense = @trip.expenses.build(date: Date.current)
     @participants = @trip.all_users
@@ -153,11 +153,11 @@ class ExpensesController < ApplicationController
     submitted_amounts = params.dig(:expense, :share_amounts)
     @share_amount_inputs = if submitted_amounts.present?
                              submitted_amounts.respond_to?(:to_unsafe_h) ? submitted_amounts.to_unsafe_h : submitted_amounts.to_h
-                           else
-                             @expense.expense_shares.each_with_object({}) do |share, values|
-                               values[share.user_id.to_s] = share.amount.to_s
-                             end
-                           end
+    else
+      @expense.expense_shares.each_with_object({}) do |share, values|
+        values[share.user_id.to_s] = share.amount.to_s
+      end
+    end
   end
 
   def require_expense_editor
