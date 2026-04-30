@@ -33,23 +33,12 @@ This project is a Ruby on Rails application for organizing trips and splitting s
 
 ## System Dependencies
 - Ruby on Rails `8.1.3`
-- SQLite3
-- No npm is required to run the app
+- Node.js and npm for frontend 
 
 ## Configuration
 Install the Ruby gems:
 ```bash
 bundle install
-```
-
-Create the database:
-```bash
-bin/rails db:create
-```
-
-Run the migrations:
-```bash
-bin/rails db:migrate
 ```
 
 ## How to Run
@@ -62,14 +51,8 @@ You can also run the Rails server directly:
 bin/rails server
 ```
 
-## How to Run the Test Suite
-Run the tests with:
-```bash
-bin/rails test
-```
-
 ## Services
-This project uses built-in Rails services for background jobs, caching, and Action Cable through the Solid suite configured in the Rails app.
+This project uses built-in Rails services for background jobs and caching.
 
 ## Deployment Instructions
 The application is configured for Docker deployment.
