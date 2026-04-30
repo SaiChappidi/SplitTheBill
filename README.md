@@ -1,24 +1,82 @@
-# README
+# Final Project: Split The Bill - Group No Sin Da Woo
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Overview
+This project is a Ruby on Rails application for organizing trips and splitting shared expenses among participants. The website lets users create trips, add expenses, choose who shares each expense, and review balances and settlement suggestions.
 
-Things you may want to cover:
+## Features
+- Create and manage trips with participants
+- Add, edit, and delete shared expenses
+- Split expenses across all participants or only selected participants
+- Enter custom amounts per person for each expense
+- View expense totals, balances, and settlement suggestions
+- Filter and search expenses on the trip page
 
-* Ruby version
+## File Structure
+```text
+.
+├── app/
+│   ├── controllers/
+│   ├── models/
+│   ├── views/
+│   ├── assets/
+│   └── javascript/
+├── config/
+├── db/
+├── test/
+├── bin/
+├── Gemfile
+└── README.md
+```
 
-* System dependencies
+## Ruby Version
+- Ruby `3.3.5`
 
-* Configuration
+## System Dependencies
+- Ruby on Rails `8.1.3`
+- SQLite3
+- No npm is required to run the app
 
-* Database creation
+## Configuration
+Install the Ruby gems:
+```bash
+bundle install
+```
 
-* Database initialization
+Create the database:
+```bash
+bin/rails db:create
+```
 
-* How to run the test suite
+Run the migrations:
+```bash
+bin/rails db:migrate
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+## How to Run
+Start the app in development with:
+```bash
+bin/dev
+```
+You can also run the Rails server directly:
+```bash
+bin/rails server
+```
 
-* Deployment instructions
+## How to Run the Test Suite
+Run the tests with:
+```bash
+bin/rails test
+```
 
-* ...
+## Services
+This project uses built-in Rails services for background jobs, caching, and Action Cable through the Solid suite configured in the Rails app.
+
+## Deployment Instructions
+The application is configured for Docker deployment.
+
+To build the production image:
+```bash
+docker build -t nosindawoo_final_project .
+```
+
+To run it in production, provide `RAILS_MASTER_KEY` and start the container as described in the `Dockerfile`.
