@@ -24,6 +24,13 @@ class Trip < ApplicationRecord
     total = 0.0
 
     expenses.includes(:expense_shares).find_each do |expense|
+      shares = expense.expense_shares
+
+      if shares.any? && shares.all? { |share| share.amount.present? }
+        total += shares.select { |share| share.user_id == user.id }.sum { |share| share.amount.to_f }
+        next
+      end
+
       shared_user_ids = expense.expense_shares.pluck(:user_id)
       shared_user_ids = all_users.map(&:id) if shared_user_ids.empty?
 

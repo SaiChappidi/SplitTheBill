@@ -37,13 +37,20 @@
 
     <div class="field">
       <label>Who shares this expense?</label>
-      <p class="field-help">Leave empty to split across all participants.</p>
+      <p class="field-help">Enter custom amounts per person. Leave an amount blank to split the remaining balance evenly among the selected people.</p>
       <div class="participant-list">
-        <% selected_ids = @expense.persisted? ? @expense.shared_users.pluck(:id) : @participants.map(&:id) %>
         <% @participants.each do |participant| %>
           <label class="check-tile">
-            <%= check_box_tag "expense[shared_user_ids][]", participant.id, selected_ids.include?(participant.id) %>
-            <span><%= participant.name %></span>
+            <div>
+              <%= check_box_tag "expense[shared_user_ids][]", participant.id, @selected_share_ids.include?(participant.id) %>
+              <span><%= participant.name %></span>
+            </div>
+            <%= number_field_tag "expense[share_amounts][#{participant.id}]",
+                                 @share_amount_inputs[participant.id.to_s],
+                                 step: "0.01",
+                                 min: "0.01",
+                                 placeholder: "0.00",
+                                 class: "share-amount-input" %>
           </label>
         <% end %>
       </div>

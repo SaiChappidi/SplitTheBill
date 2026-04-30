@@ -92,7 +92,14 @@
 						<td><%= expense.date.strftime("%b %-d, %Y") %></td>
 						<td><%= expense.user.name %></td>
 						<td>$<%= format("%.2f", expense.amount) %></td>
-						<td><%= share_names.join(", ") %></td>
+						<td>
+							<% share_labels = if expense.expense_shares.any? && expense.expense_shares.all? { |share| share.amount.present? }
+									expense.expense_shares.map { |share| "#{share.user.name} ($#{format('%.2f', share.amount)})" }
+								else
+									share_names
+								end %>
+							<%= share_labels.join(", ") %>
+						</td>
 						<td class="actions-row">
 							<%= link_to "Edit", edit_trip_expense_path(@trip, expense), class: "btn btn-small btn-ghost" %>
 							<%= link_to "Delete", trip_expense_path(@trip, expense),

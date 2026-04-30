@@ -227,6 +227,8 @@ select {
 
 .check-tile {
 	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
 	align-items: center;
 	gap: 0.55rem;
 	border: 1px solid var(--line);
@@ -235,8 +237,20 @@ select {
 	background: #fff;
 }
 
+.check-tile > div {
+	display: flex;
+	align-items: center;
+	gap: 0.55rem;
+	min-width: 0;
+}
+
 .check-tile input[type="checkbox"] {
 	width: auto;
+}
+
+.share-amount-input {
+	width: 7.5rem;
+	margin-left: auto;
 }
 
 .trip-head {

@@ -8,7 +8,7 @@ class TripsController < ApplicationController
   end
 
   def show
-    @expenses = @trip.expenses.includes(:user, :expense_shares).order(date: :desc, created_at: :desc)
+    @expenses = @trip.expenses.includes(:user, expense_shares: :user).order(date: :desc, created_at: :desc)
     @participant_users = @trip.all_users
 
     @spent_by_user = Hash.new(0.0)
@@ -17,12 +17,17 @@ class TripsController < ApplicationController
     @expenses.each do |expense|
       payer = expense.user
       amount = expense.amount.to_f
-      shares = expense.shared_users
-      share_users = shares.any? ? shares : @participant_users
-      per_user_share = amount / share_users.size
+      shares = expense.expense_shares
 
       @spent_by_user[payer.id] += amount
-      share_users.each { |share_user| @owed_by_user[share_user.id] += per_user_share }
+
+      if shares.any? && shares.all? { |share| share.amount.present? }
+        shares.each { |share| @owed_by_user[share.user_id] += share.amount.to_f }
+      else
+        share_users = expense.shared_users.any? ? expense.shared_users : @participant_users
+        per_user_share = amount / share_users.size
+        share_users.each { |share_user| @owed_by_user[share_user.id] += per_user_share }
+      end
     end
 
     @net_balances = @participant_users.each_with_object({}) do |participant, balances|

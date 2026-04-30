@@ -3,7 +3,9 @@
 one:
   expense: one
   user: one
+  amount: 9.99
 
 two:
   expense: two
   user: two
+  amount: 9.99
