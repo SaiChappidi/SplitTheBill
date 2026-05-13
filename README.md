@@ -1,7 +1,7 @@
-# Final Project: Split The Bill - Group No Sin Da Woo
+# Split The Bill
 
 ## Overview
-This project is a Ruby on Rails application for organizing trips and splitting shared expenses among participants. The website lets users create trips, add expenses, choose who shares each expense, and review balances and settlement suggestions.
+This project is a Ruby on Rails application for organizing trips and splitting shared expenses among participants. The website lets users create trips, add expenses, choose who shares each expense, and review balances and settlement suggestions. This project was created in CSE 3901 by Sai, Charishma, Cynthia, Syah, Sindhu.
 
 ## Features
 - Create and manage trips with participants
