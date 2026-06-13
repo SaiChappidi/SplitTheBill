@@ -1,5 +1,8 @@
 <section class="card form-card">
   <h1><%= @trip.new_record? ? "Create a Trip" : "Edit Trip" %></h1>
+  <p style="margin-bottom: 1.3rem;">
+    <%= @trip.new_record? ? "Set the dates and invite the people sharing expenses." : "Update trip details and participants." %>
+  </p>
 
   <% if @trip.errors.any? %>
     <div class="error-box">
@@ -20,12 +23,12 @@
       </div>
 
       <div class="field">
-        <%= f.label :start_date %>
+        <%= f.label :start_date, "Start Date" %>
         <%= f.date_field :start_date %>
       </div>
 
       <div class="field">
-        <%= f.label :end_date %>
+        <%= f.label :end_date, "End Date" %>
         <%= f.date_field :end_date %>
       </div>
     </div>
@@ -37,8 +40,11 @@
         <% @available_users.each do |user| %>
           <% checked = user.id == current_user.id || @trip.participants.any? { |p| p.user_id == user.id } %>
           <label class="check-tile">
-            <%= check_box_tag "trip[participant_user_ids][]", user.id, checked, disabled: user.id == current_user.id %>
-            <span><%= user.name %> (<%= user.email %>)</span>
+            <div>
+              <%= check_box_tag "trip[participant_user_ids][]", user.id, checked, disabled: user.id == current_user.id %>
+              <%= avatar_tag(user) %>
+              <span><%= user.name %></span>
+            </div>
           </label>
         <% end %>
       </div>
@@ -46,7 +52,7 @@
 
     <div class="actions-row">
       <%= f.submit(@trip.new_record? ? "Create Trip" : "Save Changes", class: "btn") %>
-      <%= link_to "Back", trips_path, class: "btn btn-ghost" %>
+      <%= link_to "Cancel", trips_path, class: "btn btn-ghost" %>
     </div>
   <% end %>
 </section>

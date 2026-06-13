@@ -1,18 +1,23 @@
-<section class="card auth-card">
-  <h1>Welcome Back</h1>
-  <p>Log in to continue managing your group trips.</p>
+<% content_for :title, "Log In | Split the Bill" %>
 
-  <%= form_with(scope: :session, url: login_path) do |f| %>
-    <div class="field">
-      <%= f.label :email %>
-      <%= f.email_field :email, autofocus: true %>
-    </div>
-    <div class="field">
-      <%= f.label :password %>
-      <%= f.password_field :password %>
-    </div>
-    <%= f.submit "Log In", class: "btn" %>
-  <% end %>
+<div class="auth-wrap">
+  <section class="card auth-card">
+    <span class="auth-badge">&divide;</span>
+    <h1>Welcome back</h1>
+    <p>Log in to continue managing your group trips.</p>
 
-  <p class="auth-switch">No account? <%= link_to "Create one", signup_path %></p>
-</section>
+    <%= form_with(scope: :session, url: login_path) do |f| %>
+      <div class="field">
+        <%= f.label :email %>
+        <%= f.email_field :email, autofocus: true, placeholder: "you@example.com" %>
+      </div>
+      <div class="field">
+        <%= f.label :password %>
+        <%= f.password_field :password, placeholder: "Your password" %>
+      </div>
+      <%= f.submit "Log In", class: "btn" %>
+    <% end %>
+
+    <p class="auth-switch">No account? <%= link_to "Create one", signup_path %></p>
+  </section>
+</div>

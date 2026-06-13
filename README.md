@@ -41,11 +41,51 @@ Install the Ruby gems:
 bundle install
 ```
 
+On Windows, if `bundle install` fails while building `psych`, install the Ruby DevKit dependency:
+```powershell
+C:\Ruby40-x64\msys64\usr\bin\bash.exe -lc "pacman -S --noconfirm mingw-w64-ucrt-x86_64-libyaml"
+```
+
 ## How to Run
+
+### macOS / Linux
 Start the app in development with:
 ```bash
 bin/dev
 ```
+
+First-time setup:
+```bash
+bin/setup
+```
+
+### Windows
+From PowerShell in the project folder:
+```powershell
+cd E:\splithebill\SplitTheBill
+.\bin\dev.ps1
+```
+
+First-time setup:
+```powershell
+.\bin\setup.ps1 --skip-server
+```
+
+You can also use the batch wrappers:
+```powershell
+.\bin\dev.bat
+.\bin\setup.bat --skip-server
+```
+
+If Ruby is on your PATH, these also work:
+```powershell
+ruby .\bin\dev
+ruby .\bin\setup --skip-server
+```
+
+Open **http://localhost:3000** after the server starts.
+
+### All platforms
 You can also run the Rails server directly:
 ```bash
 bin/rails server

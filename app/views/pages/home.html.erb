@@ -1,0 +1,203 @@
+<% content_for :title, "Split the Bill — The trip was priceless. The bill wasn't." %>
+<% content_for :full_bleed, true %>
+
+<div class="landing">
+
+	<%# ---------- Ticker ---------- %>
+	<div class="ticker" aria-hidden="true">
+		<div class="ticker-track">
+			<% 2.times do %>
+				<span>No more spreadsheets</span>
+				<span>Split to the cent</span>
+				<span>Fewest payments to settle</span>
+				<span>Free forever</span>
+				<span>Every trip, one ledger</span>
+				<span>No awkward math</span>
+			<% end %>
+		</div>
+	</div>
+
+	<%# ---------- Hero ---------- %>
+	<section class="lp-hero">
+		<div class="container lp-hero-grid">
+			<div>
+				<span class="lp-eyebrow">Shared expenses, settled fairly</span>
+				<h1>The trip was priceless.<br><em>The bill</em> <span class="hl">shouldn't be.</span></h1>
+				<p class="lp-lede">
+					Split the Bill keeps one clean, honest ledger for your whole group &mdash;
+					who paid, who owes, and the fewest payments to make everyone even.
+					No spreadsheets. No receipt archaeology. No hard feelings.
+				</p>
+				<div class="lp-cta-row">
+					<%= link_to "Start your ledger", signup_path, class: "btn btn-large" %>
+					<%= link_to "Log in", login_path, class: "btn btn-ghost btn-large" %>
+				</div>
+				<p class="lp-cta-note">Free forever &middot; No card required &middot; Setup &lt; 1 min</p>
+			</div>
+
+			<div class="lp-scene" data-parallax-scene>
+				<div class="lp-scene-blob" data-depth="6"></div>
+
+				<div class="receipt" data-depth="16">
+					<div class="receipt-center">
+						<span class="receipt-brand">&divide;</span>
+						<div class="receipt-title">OREGON COAST TRIP</div>
+						<div class="receipt-sub">JUN 12&ndash;16 &middot; 4 PEOPLE</div>
+					</div>
+					<hr class="r-rule">
+					<div class="r-line"><span>Beach house, 2 nts</span><span class="leader"></span><span class="val">$412.50</span></div>
+					<div class="r-line"><span>Tank of gas</span><span class="leader"></span><span class="val">$48.10</span></div>
+					<div class="r-line"><span>Crab shack dinner</span><span class="leader"></span><span class="val">$186.40</span></div>
+					<div class="r-line"><span>Kayak rental</span><span class="leader"></span><span class="val">$120.00</span></div>
+					<div class="r-line"><span>Groceries</span><span class="leader"></span><span class="val">$79.25</span></div>
+					<hr class="r-rule">
+					<div class="r-line r-total"><span>TOTAL</span><span class="leader"></span><span class="val">$846.25</span></div>
+					<div class="r-line"><span>Per person</span><span class="leader"></span><span class="val">$211.56</span></div>
+					<hr class="r-rule">
+					<div class="r-line r-pay"><span>Syah &rarr; Sai</span><span class="leader"></span><span class="val">$77.19</span></div>
+					<div class="r-line r-pay"><span>Cynthia &rarr; Sai</span><span class="leader"></span><span class="val">$61.56</span></div>
+					<div class="receipt-foot">&mdash; thank you, come again &mdash;</div>
+					<span class="stamp">Settled</span>
+				</div>
+
+				<span class="float-chip float-chip-a" data-depth="40"><span class="dot"></span>2 payments, everyone even</span>
+				<span class="float-chip float-chip-b" data-depth="52">No spreadsheets harmed</span>
+			</div>
+		</div>
+	</section>
+
+	<%# ---------- Receipt subtotal strip ---------- %>
+	<section class="lp-subtotal">
+		<div class="container lp-subtotal-grid">
+			<div class="r-line"><span>Setup time</span><span class="leader"></span><span class="val">1 min</span></div>
+			<div class="r-line"><span>Accuracy</span><span class="leader"></span><span class="val">To the cent</span></div>
+			<div class="r-line"><span>Payments to settle</span><span class="leader"></span><span class="val">Minimum</span></div>
+			<div class="r-line"><span>Price</span><span class="leader"></span><span class="val">$0.00</span></div>
+		</div>
+	</section>
+
+	<%# ---------- Features (bento) ---------- %>
+	<section id="features">
+		<div class="container">
+			<div class="lp-section-head">
+				<span class="lp-kicker">What you get</span>
+				<h2>Everything your group needs, nothing it doesn&rsquo;t</h2>
+				<p>From the first gas stop to the last dinner, every shared cost lives in one tidy ledger.</p>
+			</div>
+
+			<div class="lp-bento">
+				<div class="lp-cell lp-cell-4">
+					<span class="lp-num">No. 01</span>
+					<h3>One ledger, zero guesswork</h3>
+					<p>Log each expense with who paid, the date, and a category. Everyone on the trip sees the same numbers &mdash; no &ldquo;wait, who covered the gas?&rdquo;</p>
+					<div class="lp-demo">
+						<div class="r-line"><span>Beach house, 2 nts</span><span class="leader"></span><span class="val">$412.50</span></div>
+						<div class="r-line"><span>Tank of gas</span><span class="leader"></span><span class="val">$48.10</span></div>
+						<div class="r-line"><span>Crab shack dinner</span><span class="leader"></span><span class="val">$186.40</span></div>
+					</div>
+				</div>
+
+				<div class="lp-cell lp-cell-2">
+					<span class="lp-num">No. 02</span>
+					<h3>Split it your way</h3>
+					<p>Even split across everyone, just the people involved, or exact custom amounts per person. The leftover splits itself.</p>
+				</div>
+
+				<div class="lp-cell lp-cell-3 lp-cell-dark">
+					<span class="lp-num">No. 03</span>
+					<h3>Settle in the fewest payments</h3>
+					<p>A week of IOUs gets compressed into the minimum set of transfers. Nobody pays anyone twice.</p>
+					<span class="lp-equation">7 IOUs &rarr; 2 payments</span>
+				</div>
+
+				<div class="lp-cell lp-cell-3">
+					<span class="lp-num">No. 04</span>
+					<h3>See where it all went</h3>
+					<p>Search and filter expenses while totals and a category chart update live. Find out exactly how much went to crab shacks.</p>
+				</div>
+
+				<div class="lp-cell lp-cell-2 lp-cell-highlight">
+					<span class="lp-num">No. 05</span>
+					<h3>Real trip categories</h3>
+					<p>Built around how groups actually spend.</p>
+					<div class="lp-tag-cloud">
+						<span class="tag tag-lodging">Lodging</span>
+						<span class="tag tag-food">Food</span>
+						<span class="tag tag-gas">Gas</span>
+						<span class="tag tag-transport">Transport</span>
+						<span class="tag tag-entertainment">Entertainment</span>
+					</div>
+				</div>
+
+				<div class="lp-cell lp-cell-4">
+					<span class="lp-num">No. 06</span>
+					<h3>Private to your group</h3>
+					<p>Trips are visible only to their participants. Your spending stays between you and the people who were there.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<%# ---------- How it works (ledger) ---------- %>
+	<section id="how-it-works" style="padding-top: 0;">
+		<div class="container">
+			<div class="lp-section-head">
+				<span class="lp-kicker">How it works</span>
+				<h2>Three steps to even</h2>
+			</div>
+			<div class="lp-ledger">
+				<div class="lp-entry">
+					<span class="lp-entry-num">01</span>
+					<div>
+						<h3>Open a trip</h3>
+						<p>Name it, set the dates, add your travel companions. Takes about as long as ordering a coffee.</p>
+					</div>
+				</div>
+				<div class="lp-entry">
+					<span class="lp-entry-num">02</span>
+					<div>
+						<h3>Log costs as they happen</h3>
+						<p>Someone pays, someone logs it. Choose who shares each expense &mdash; evenly or with exact amounts.</p>
+					</div>
+				</div>
+				<div class="lp-entry">
+					<span class="lp-entry-num">03</span>
+					<div>
+						<h3>Settle up once</h3>
+						<p>At the end, open the settlement plan and follow the suggested payments. Stamp it settled, plan the next one.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<%# ---------- Quote ---------- %>
+	<section style="padding-top: 0;">
+		<div class="container">
+			<div class="lp-quote">
+				<span class="qmark">&ldquo;</span>
+				<blockquote>
+					We used to spend the last night of every trip arguing over a spreadsheet.
+					Now we spend it <mark>planning the next trip</mark>.
+				</blockquote>
+				<span class="lp-quote-who">
+					<span class="avatar avatar-hue-5">RM</span>
+					A happier travel group
+				</span>
+			</div>
+		</div>
+	</section>
+
+	<%# ---------- Final CTA ---------- %>
+	<section style="padding-top: 0;">
+		<div class="container">
+			<div class="lp-cta-panel">
+				<span class="lp-kicker">Last call</span>
+				<h2>Ready for your next trip?</h2>
+				<p>Create your account and have your first ledger open before you finish your coffee.</p>
+				<%= link_to "Create your free account", signup_path, class: "btn btn-on-dark btn-large" %>
+			</div>
+		</div>
+	</section>
+
+</div>
