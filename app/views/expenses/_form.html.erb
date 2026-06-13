@@ -1,5 +1,8 @@
 <section class="card form-card">
   <h1><%= @expense.new_record? ? "Add Expense" : "Edit Expense" %></h1>
+  <p style="margin-bottom: 1.3rem;">
+    Log what was paid and choose who shares the cost.
+  </p>
 
   <% if @expense.errors.any? %>
     <div class="error-box">
@@ -21,7 +24,7 @@
 
       <div class="field">
         <%= f.label :amount %>
-        <%= f.number_field :amount, step: "0.01", min: "0.01" %>
+        <%= f.number_field :amount, step: "0.01", min: "0.01", placeholder: "0.00" %>
       </div>
 
       <div class="field">
@@ -43,6 +46,7 @@
           <label class="check-tile">
             <div>
               <%= check_box_tag "expense[shared_user_ids][]", participant.id, @selected_share_ids.include?(participant.id) %>
+              <%= avatar_tag(participant) %>
               <span><%= participant.name %></span>
             </div>
             <%= number_field_tag "expense[share_amounts][#{participant.id}]",
@@ -58,7 +62,7 @@
 
     <div class="actions-row">
       <%= f.submit(@expense.new_record? ? "Add Expense" : "Save Expense", class: "btn") %>
-      <%= link_to "Back to Trip", trip_path(@trip), class: "btn btn-ghost" %>
+      <%= link_to "Cancel", trip_path(@trip), class: "btn btn-ghost" %>
     </div>
   <% end %>
 </section>

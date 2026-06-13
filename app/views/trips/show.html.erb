@@ -1,45 +1,63 @@
-<section class="card trip-head">
+<% content_for :title, "#{@trip.name} | Split the Bill" %>
+
+<section class="trip-head">
 	<div>
+		<span class="trip-eyebrow">Trip Ledger</span>
 		<h1><%= @trip.name %></h1>
-		<p><%= @trip.start_date.strftime("%b %-d, %Y") %> to <%= @trip.end_date.strftime("%b %-d, %Y") %></p>
+		<p class="trip-dates-mono"><%= @trip.start_date.strftime("%b %-d, %Y").upcase %> &ndash; <%= @trip.end_date.strftime("%b %-d, %Y").upcase %></p>
 	</div>
 	<div class="actions-row">
-		<%= link_to "Add Expense", new_trip_expense_path(@trip), class: "btn" %>
+		<%= link_to "+ Add Expense", new_trip_expense_path(@trip), class: "btn btn-on-dark" %>
 		<%= link_to "Edit Trip", edit_trip_path(@trip), class: "btn btn-ghost" %>
 	</div>
 </section>
 
-<section class="stats-grid">
+<section class="stats-grid" style="margin-top: 1.4rem;">
 	<% @participant_users.each do |person| %>
 		<% spent = @spent_by_user[person.id] %>
 		<% owed = @owed_by_user[person.id] %>
 		<% net = @net_balances[person.id] %>
 		<article class="card stat-card">
-			<h2><%= person.name %></h2>
-			<p>Spent: $<%= format("%.2f", spent) %></p>
-			<p>Share Owed: $<%= format("%.2f", owed) %></p>
-			<p class="balance <%= net >= 0 ? "positive" : "negative" %>">
-				Net: $<%= format("%.2f", net) %>
-			</p>
+			<div class="stat-head">
+				<%= avatar_tag(person, size: :lg) %>
+				<h3><%= person.name %></h3>
+			</div>
+			<div class="stat-rows">
+				<div class="stat-row">
+					<span>Spent</span>
+					<span class="leader"></span>
+					<span class="value"><%= money(spent) %></span>
+				</div>
+				<div class="stat-row">
+					<span>Share owed</span>
+					<span class="leader"></span>
+					<span class="value"><%= money(owed) %></span>
+				</div>
+			</div>
+			<span class="net-pill <%= net >= 0 ? "positive" : "negative" %>">
+				<%= net >= 0 ? "Gets back" : "Owes" %> <%= money(net.abs) %>
+			</span>
 		</article>
 	<% end %>
 </section>
 
 <section class="card">
 	<div class="section-head">
-		<h2>Expense Insights</h2>
-		<p>Filter expenses and watch totals update live.</p>
+		<div>
+			<h2>Expense Insights</h2>
+			<p>Filter expenses and watch totals update live.</p>
+		</div>
 	</div>
 
 	<div class="filters" data-expense-filters>
 		<label>
 			Search
-			<input type="text" id="expense-search" placeholder="description...">
+			<input type="text" id="expense-search" placeholder="Search descriptions...">
 		</label>
 		<label>
 			Category
 			<select id="expense-category-filter">
-				<option value="">All</option>
+				<option value="">All categories</option>
 				<% Expense::CATEGORIES.each do |category| %>
 					<option value="<%= category %>"><%= category %></option>
 				<% end %>
@@ -48,7 +66,7 @@
 		<label>
 			Participant
 			<select id="expense-person-filter">
-				<option value="">All</option>
+				<option value="">All participants</option>
 				<% @participant_users.each do |person| %>
 					<option value="<%= person.name %>"><%= person.name %></option>
 				<% end %>
@@ -65,76 +83,97 @@
 		total <strong>$<span id="visible-expense-total"><%= format("%.2f", @expenses.sum { |e| e.amount.to_f }) %></span></strong>
 	</p>
 
-	<div class="table-wrap">
-		<table class="expense-table" id="expense-table">
-			<thead>
-				<tr>
-					<th>Description</th>
-					<th>Category</th>
-					<th>Date</th>
-					<th>Paid By</th>
-					<th>Amount</th>
-					<th>Shared With</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				<% @expenses.each do |expense| %>
-					<% share_names = expense.shared_users.any? ? expense.shared_users.map(&:name) : @participant_users.map(&:name) %>
-					<tr
-						data-description="<%= expense.description.downcase %>"
-						data-category="<%= expense.category %>"
-						data-payer="<%= expense.user.name %>"
-						data-amount="<%= expense.amount.to_f %>"
-					>
-						<td><%= expense.description %></td>
-						<td><span class="tag"><%= expense.category %></span></td>
-						<td><%= expense.date.strftime("%b %-d, %Y") %></td>
-						<td><%= expense.user.name %></td>
-						<td>$<%= format("%.2f", expense.amount) %></td>
-						<td>
-							<% share_labels = if expense.expense_shares.any? && expense.expense_shares.all? { |share| share.amount.present? }
-									expense.expense_shares.map { |share| "#{share.user.name} ($#{format('%.2f', share.amount)})" }
-								else
-									share_names
-								end %>
-							<%= share_labels.join(", ") %>
-						</td>
-						<td class="actions-row">
-							<%= link_to "Edit", edit_trip_expense_path(@trip, expense), class: "btn btn-small btn-ghost" %>
-							<%= link_to "Delete", trip_expense_path(@trip, expense),
-													class: "btn btn-small btn-danger",
-													data: { turbo_method: :delete, turbo_confirm: "Delete this expense?" } %>
-						</td>
+	<% if @expenses.any? %>
+		<div class="table-wrap">
+			<table class="expense-table" id="expense-table">
+				<thead>
+					<tr>
+						<th>Description</th>
+						<th>Category</th>
+						<th>Date</th>
+						<th>Paid By</th>
+						<th>Amount</th>
+						<th>Shared With</th>
+						<th></th>
 					</tr>
-				<% end %>
-			</tbody>
-		</table>
-	</div>
+				</thead>
+				<tbody>
+					<% @expenses.each do |expense| %>
+						<% share_names = expense.shared_users.any? ? expense.shared_users.map(&:name) : @participant_users.map(&:name) %>
+						<tr
+							data-description="<%= expense.description.downcase %>"
+							data-category="<%= expense.category %>"
+							data-payer="<%= expense.user.name %>"
+							data-amount="<%= expense.amount.to_f %>"
+						>
+							<td class="expense-desc"><%= expense.description %></td>
+							<td><%= category_tag(expense.category) %></td>
+							<td><%= expense.date.strftime("%b %-d, %Y") %></td>
+							<td>
+								<span class="payer-cell">
+									<%= avatar_tag(expense.user) %>
+									<%= expense.user.name %>
+								</span>
+							</td>
+							<td class="amount-cell"><%= money(expense.amount) %></td>
+							<td class="shared-with">
+								<% share_labels = if expense.expense_shares.any? && expense.expense_shares.all? { |share| share.amount.present? }
+										expense.expense_shares.map { |share| "#{share.user.name} (#{money(share.amount)})" }
+									else
+										share_names
+									end %>
+								<%= share_labels.join(", ") %>
+							</td>
+							<td>
+								<div class="actions-row">
+									<%= link_to "Edit", edit_trip_expense_path(@trip, expense), class: "btn btn-small btn-ghost" %>
+									<%= link_to "Delete", trip_expense_path(@trip, expense),
+															class: "btn btn-small btn-danger",
+															data: { turbo_method: :delete, turbo_confirm: "Delete this expense?" } %>
+								</div>
+							</td>
+						</tr>
+					<% end %>
+				</tbody>
+			</table>
+		</div>
+	<% else %>
+		<div class="empty-state">
+			<span class="empty-icon">$</span>
+			<h3>No expenses yet</h3>
+			<p>Add the first expense to start tracking who owes what.</p>
+			<%= link_to "Add Expense", new_trip_expense_path(@trip), class: "btn" %>
+		</div>
+	<% end %>
 </section>
 
 <section class="card">
 	<div class="section-head">
-		<h2>Settlement Plan</h2>
-		<p>Suggested minimum transactions to settle balances.</p>
+		<div>
+			<h2>Settlement Plan</h2>
+			<p>Suggested minimum transactions to settle balances.</p>
+		</div>
 	</div>
 
 	<% if @settlement_transactions.any? %>
 		<ol class="settlement-list">
 			<% @settlement_transactions.each do |transaction| %>
-				<li>
-					<strong><%= transaction[:from].name %></strong>
-					pays
-					<strong><%= transaction[:to].name %></strong>
-					<span class="settle-amount">$<%= format("%.2f", transaction[:amount]) %></span>
+				<li class="settlement-item">
+					<span class="who"><%= avatar_tag(transaction[:from]) %><%= transaction[:from].name %></span>
+					<span class="settlement-arrow">&rarr;</span>
+					<span class="who"><%= avatar_tag(transaction[:to]) %><%= transaction[:to].name %></span>
+					<span class="settle-amount"><%= money(transaction[:amount]) %></span>
 				</li>
 			<% end %>
 		</ol>
 	<% else %>
-		<p>Everyone is settled up.</p>
+		<div class="settled-up">
+			<span>&#10003;</span>
+			<span>Everyone is settled up.</span>
+		</div>
 	<% end %>
 </section>
 
 <section class="actions-row page-actions">
-	<%= link_to "Back to Trips", trips_path, class: "btn btn-ghost" %>
+	<%= link_to "&larr; Back to Trips".html_safe, trips_path, class: "btn btn-ghost" %>
 </section>

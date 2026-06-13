@@ -4,6 +4,7 @@
     <title><%= yield(:title) || "Split the Bill" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta charset="utf-8">
+    <meta name="theme-color" content="#4f46e5">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -15,16 +16,21 @@
     <div class="page-bg"></div>
     <header class="site-header">
       <nav class="navbar container">
-        <%= link_to "Split the Bill", root_path, class: "brand" %>
+        <%= link_to root_path, class: "brand" do %>
+          <span class="brand-mark">&divide;</span>
+          <span>Split the Bill</span>
+        <% end %>
 
         <% if logged_in? %>
           <div class="nav-links">
             <%= link_to "Trips", trips_path, class: "nav-link" %>
-            <span class="user-chip"><%= current_user.name %></span>
+            <span class="user-chip"><%= avatar_tag(current_user) %><%= current_user.name %></span>
             <%= link_to "Logout", logout_path, class: "nav-link", data: { turbo_method: :delete } %>
           </div>
         <% else %>
           <div class="nav-links">
+            <%= link_to "Features", root_path(anchor: "features"), class: "nav-link" %>
+            <%= link_to "How it works", root_path(anchor: "how-it-works"), class: "nav-link" %>
             <%= link_to "Login", login_path, class: "nav-link" %>
             <%= link_to "Sign Up", signup_path, class: "btn btn-small" %>
           </div>
@@ -42,12 +48,16 @@
       </div>
     <% end %>
 
-    <main class="container main-content">
+    <main class="<%= content_for?(:full_bleed) ? "main-content full-bleed" : "container main-content" %>">
       <%= yield %>
     </main>
 
-    <footer class="footer container">
-      <p>Built for smarter group trips. &copy; <%= Time.now.year %> Split the Bill</p>
+    <footer class="footer">
+      <div class="container footer-inner">
+        <p>&copy; <%= Time.now.year %> Split the Bill</p>
+        <p class="footer-receipt">&middot; &middot; &middot; &mdash; end of receipt &mdash; &middot; &middot; &middot;</p>
+        <p>Built for smarter group trips.</p>
+      </div>
     </footer>
   </body>
 </html>

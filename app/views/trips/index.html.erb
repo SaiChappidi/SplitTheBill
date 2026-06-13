@@ -1,19 +1,37 @@
-<section class="hero card">
+<% content_for :title, "Your Trips | Split the Bill" %>
+
+<section class="hero">
 	<div>
+		<span class="hero-eyebrow">The Ledger</span>
 		<h1>Your Trips</h1>
 		<p>Track who paid, who owes, and settle up fast.</p>
 	</div>
-	<%= link_to "New Trip", new_trip_path, class: "btn" %>
+	<div class="hero-actions">
+		<%= link_to "+ New Trip", new_trip_path, class: "btn btn-on-dark" %>
+	</div>
 </section>
 
-<section>
+<section style="margin-top: 1.4rem;">
 	<% if @trips.any? %>
 		<div class="trip-grid">
 			<% @trips.each do |trip| %>
 				<article class="card trip-card">
+					<span class="trip-dates">
+						<%= trip.start_date.strftime("%b %-d, %Y") %> &ndash; <%= trip.end_date.strftime("%b %-d, %Y") %>
+					</span>
 					<h2><%= trip.name %></h2>
-					<p><%= trip.start_date.strftime("%b %-d, %Y") %> to <%= trip.end_date.strftime("%b %-d, %Y") %></p>
-					  <p><strong><%= trip.participants.count.positive? ? trip.participants.count : 1 %></strong> participants</p>
+					<div class="trip-meta">
+						<% members = trip.all_users.first(5) %>
+						<span class="avatar-stack">
+							<% members.each do |member| %>
+								<%= avatar_tag(member) %>
+							<% end %>
+						</span>
+						<span class="count-label">
+							<%= pluralize([ trip.participants.count, 1 ].max, "participant") %>
+						</span>
+					</div>
+					<div class="ticket-divider"></div>
 					<div class="actions-row">
 						<%= link_to "View", trip_path(trip), class: "btn btn-small" %>
 						<%= link_to "Edit", edit_trip_path(trip), class: "btn btn-ghost btn-small" %>
@@ -26,6 +44,7 @@
 		</div>
 	<% else %>
 		<article class="card empty-state">
+			<span class="empty-icon">&divide;</span>
 			<h2>No trips yet</h2>
 			<p>Create your first trip to start logging shared expenses.</p>
 			<%= link_to "Create Trip", new_trip_path, class: "btn" %>
